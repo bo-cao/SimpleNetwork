@@ -6,7 +6,7 @@
 TCPServer tcp;
 pthread_t msg1[MAX_CLIENT];
 int num_message = 0;
-int time_send   = 2700;
+int time_send   = 1;
 
 void close_app(int s) {
 	tcp.closed();
@@ -76,23 +76,27 @@ void * received(void * m)
 
 int main(int argc, char **argv)
 {
-	if(argc < 2) {
-		cerr << "Usage: ./server port (opt)time-send" << endl;
-		return 0;
-	}
-	if(argc == 3)
-		time_send = atoi(argv[2]);
-	std::signal(SIGINT, close_app);
+	//if(argc < 3) {
+	//	cerr << "Usage: ./server port (opt)time-send" << endl;
+	//	return 0;
+	//}
+	//if(argc == 4)
+	//	time_send = atoi(argv[3]);
+	//std::signal(SIGINT, close_app);
 
 	pthread_t msg;
         vector<int> opts = { SO_REUSEPORT, SO_REUSEADDR };
 
-	if( tcp.setup(atoi(argv[1]),opts) == 0) {
+	if( tcp.setup(6666,opts) == 0) {
 		if( pthread_create(&msg, NULL, received, (void *)0) == 0)
 		{
 			while(1) {
+				//cerr<<"???"<<endl;
 				tcp.accepted();
-				cerr << "Accepted" << endl;
+				std::string data;
+				cin>>data;
+				tcp.Send(data,0); 
+				cerr << "Sended" << endl;
 			}
 		}
 	}

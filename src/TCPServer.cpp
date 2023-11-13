@@ -70,14 +70,14 @@ int TCPServer::setup(int port, vector<int> opts)
 	}
 
 	serverAddress.sin_family      = AF_INET;
-	serverAddress.sin_addr.s_addr = htonl(INADDR_ANY);
+	// serverAddress.sin_addr.s_addr = htonl(INADDR_ANY);
+	inet_aton("10.18.18.2",&serverAddress.sin_addr);
 	serverAddress.sin_port        = htons(port);
 
 	if((::bind(sockfd,(struct sockaddr *)&serverAddress, sizeof(serverAddress))) < 0){
 		cerr << "Errore bind" << endl;
 		return -1;
 	}
-	
  	if(listen(sockfd,5) < 0){
 		cerr << "Errore listen" << endl;
 		return -1;
